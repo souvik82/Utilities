@@ -1,0 +1,39 @@
+FROM alpine:3.11
+LABEL maintainer="Souvik Das <amisouvikdas@gmail.com>"
+
+ENV SPARK_VERSION=2.4.5
+ENV HADOOP_VERSION=2.7
+ENV SPARK_MASTER_NAME spark-master
+ENV SPARK_MASTER_PORT 7077
+ENV SPARK_APPLICATION_JAR_LOCATION /app/application.jar
+ENV SPARK_APPLICATION_PYTHON_LOCATION /app/app.py
+ENV SPARK_APPLICATION_MAIN_CLASS my.main.Application
+ENV SPARK_APPLICATION_ARGS ""
+
+COPY spark-submit.sh /
+
+RUN apk add --no-cache curl bash openjdk8-jre python3 py-pip nss libc6-compat \
+      && ln -s /lib64/ld-linux-x86-64.so.2 /lib/ld-linux-x86-64.so.2 \
+      && chmod +x *.sh \
+      && wget https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz \
+      && tar -xvzf spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz \
+      && mv spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} spark \
+      && rm spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz \
+      && cd /
+# Setup dependencies for Google Cloud Storage access.
+ADD https://repo1.maven.org/maven2/com/google/guava/guava/19.0/guava-19.0.jar /spark/jars
+# Add the connector jar needed to access Google Cloud Storage using the Hadoop FileSystem API.
+ADD https://repo1.maven.org/maven2/com/google/cloud/bigdataoss/gcs-connector/hadoop3-2.0.0/gcs-connector-hadoop3-2.0.0.jar /spark/jars
+ADD https://repo1.maven.org/maven2/com/google/cloud/google-cloud-storage/1.106.0/google-cloud-storage-1.106.0.jar /spark/jars
+ADD https://storage.googleapis.com/spark-lib/bigquery/spark-bigquery-latest.jar /spark/jars	  
+ADD handy-balancer-273607-141c2b5a61ef.json /spark/conf
+
+RUN mkdir -p /opt/hadoop/conf
+COPY core-site.xml /opt/hadoop/conf
+COPY spark-env.sh /spark/conf
+
+#Give permission to execute scripts
+RUN chmod +x /spark-submit.sh
+
+ENV PYTHONHASHSEED 1
+#CMD ["/bin/bash", "/spark-submit.sh"]
