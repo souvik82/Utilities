@@ -1,26 +1,26 @@
 import org.apache.log4j.Logger
 import java.sql.Connection
-import com.hpe.utils.Utilities
-import com.hpe.config.EnvPropertiesObject
-import com.hpe.config.PropertiesObject
-import com.hpe.config.ConfigObjectNonStreaming
-import com.hpe.config.SetUpConfigurationNonStreaming
-import com.hpe.config.AuditLoadObject
-import com.hpe.config.StreamingPropertiesObject
+import com.my.utils.Utilities
+import com.my.config.EnvPropertiesObject
+import com.my.config.PropertiesObject
+import com.my.config.ConfigObjectNonStreaming
+import com.my.config.SetUpConfigurationNonStreaming
+import com.my.config.AuditLoadObject
+import com.my.config.StreamingPropertiesObject
 import java.util.HashMap
 import scala.collection.Map
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.types.StructField
 import org.apache.spark.sql.types.StringType
-import com.hpe.utils.DataQuality
-import com.hpe.config.SKeyObject
+import com.my.utils.DataQuality
+import com.my.config.SKeyObject
 import org.apache.spark.sql.functions._
 import org.apache.spark.storage.StorageLevel
 import org.apache.spark.sql.AnalysisException
 import java.net.ConnectException
 import org.apache.spark.sql.Row
-import com.hpe.utils._
-import com.hpe.config._
+import com.my.utils._
+import com.my.config._
 import com.github.opendevl.JFlat //Newly added
 
 object AribaProcessor {
