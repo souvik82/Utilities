@@ -5,7 +5,6 @@ import java.sql.{Connection, DriverManager, ResultSet, Statement}
 import java.util.{HashMap, Properties}
 
 import com.github.opendevl.JFlat
-import main.scala.com.hpe.ope.config._
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.kafka.common.serialization.StringDeserializer
